@@ -7,7 +7,8 @@ DISPLAY_HEIGHT = 700
 BACKGROUND_COLOR = (255,255,255)
 BUTTON_OFF = (51,39,0)
 BUTTON_ON = (255,204,0)
-WINDOW_SPAWN_LOCATION = [10, 10]
+
+WINDOW_SPAWN_LOCATION = [-110, 10]
 WINDOW_SPAWN_SIZE = [100,100]
 
 
@@ -22,14 +23,18 @@ class window:
         self.pos = pos
         self.light = light
 
-
         draw_windows(self.pos, self.size, self.light)
 
-def WINDOW_LOCATION():
-    if WINDOW_SPAWN_LOCATION == WINDOW_SPAWN_LOCATION:
-        ## HERE IS WHERE I LEFT OFF
+#SPAWNS WINDOWS
+def window_pos():
+    if WINDOW_SPAWN_LOCATION[0] <= DISPLAY_WIDTH - 120:#last spawn in row
+        WINDOW_SPAWN_LOCATION[0] = WINDOW_SPAWN_LOCATION[0] + 120
+    else:
+        WINDOW_SPAWN_LOCATION[0] = 10
+        WINDOW_SPAWN_LOCATION[1] = WINDOW_SPAWN_LOCATION[1] + 120
+    print(WINDOW_SPAWN_LOCATION)
     return WINDOW_SPAWN_LOCATION
-
+    
 #draw boxes on screen
 def draw_windows(pos, size, on_off):
     top = pos[0]
@@ -63,13 +68,15 @@ def click_checker(pos_size_on):
     #CHECK IF CLICK IS INSIDE BUTTON, Then run button state changer(Toggle_light) return light -> make state change to object
 
 def main():
+    COUNTER = 0
+    XCOUNTER = 0
+    MYCOUNTER = 0
     starting_x_windows = 5
     starting_y_windows = 5
+    window_position = [10,10]
     gameDisplay.fill(BACKGROUND_COLOR)
     draw_windows([0,600],[DISPLAY_WIDTH,10], False)#Square box (600X600)
-    building = dict(enumerate([window(WINDOW_LOCATION(), WINDOW_SPAWN_SIZE) for i in range(starting_x_windows) for i in range(starting_y_windows)]))
-    for key,value in building.items():
-        print(key,value)
+    building = dict(enumerate([window((window_pos()), WINDOW_SPAWN_SIZE) for i in range(starting_x_windows) for c in range(starting_y_windows)]))
 
     while True:
         for event in pygame.event.get():
