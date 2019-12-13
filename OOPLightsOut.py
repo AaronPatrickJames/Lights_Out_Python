@@ -7,6 +7,8 @@ DISPLAY_HEIGHT = 700
 BACKGROUND_COLOR = (255,255,255)
 BUTTON_OFF = (51,39,0)
 BUTTON_ON = (255,204,0)
+WINDOW_SPAWN_LOCATION = [10, 10]
+WINDOW_SPAWN_SIZE = [100,100]
 
 
 gameDisplay = pygame.display.set_mode((DISPLAY_WIDTH, DISPLAY_HEIGHT))
@@ -23,6 +25,10 @@ class window:
 
         draw_windows(self.pos, self.size, self.light)
 
+def WINDOW_LOCATION():
+    if WINDOW_SPAWN_LOCATION == WINDOW_SPAWN_LOCATION:
+        ## HERE IS WHERE I LEFT OFF
+    return WINDOW_SPAWN_LOCATION
 
 #draw boxes on screen
 def draw_windows(pos, size, on_off):
@@ -39,7 +45,7 @@ def draw_windows(pos, size, on_off):
     
 def toggle_light(this_light):
     if this_light == True:
-        this_light = False:
+        this_light = False
     else:
         this_light = True
     return this_light
@@ -57,19 +63,28 @@ def click_checker(pos_size_on):
     #CHECK IF CLICK IS INSIDE BUTTON, Then run button state changer(Toggle_light) return light -> make state change to object
 
 def main():
-    
+    starting_x_windows = 5
+    starting_y_windows = 5
     gameDisplay.fill(BACKGROUND_COLOR)
-    draw_windows([0,600],[DISPLAY_WIDTH,10])#Square box (600X600)
+    draw_windows([0,600],[DISPLAY_WIDTH,10], False)#Square box (600X600)
+    building = dict(enumerate([window(WINDOW_LOCATION(), WINDOW_SPAWN_SIZE) for i in range(starting_x_windows) for i in range(starting_y_windows)]))
+    for key,value in building.items():
+        print(key,value)
+
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 quit()
-        #mouse clicked
+        #mouse clicked(click_checker)
+        am_i_pressed = pygame.mouse.get_pressed()
+        if am_i_pressed[1] == 1:
+            for key,value in building.items():#note building need to be defined
+                light = click_checker(value)
         #for key in dict (pass in values, pos, size)
             #run click_checker(dict key:(pos,size,on_off)) 
         pygame.display.update()
         clock.tick(15)
-
+        
 if __name__ == "__main__":
     main()
