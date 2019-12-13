@@ -49,8 +49,13 @@ def click_checker(pos_size_on):
     pos = pos_size_on[0]
     size = pos_size_on[1]
     on_off = pos_size_on[2]
-    #left off here
+    #if mouse is in bounds of self.button/self.window
+    if int(pos[0] + size[0]) > mouse_pos[0] > int(pos[0]) and int(pos[1] + size[1]) > mouse_pos[1] > int(pos[1]):
+        on_off = toggle_light(on_off)
+        
+    return on_off
     #CHECK IF CLICK IS INSIDE BUTTON, Then run button state changer(Toggle_light) return light -> make state change to object
+
 def main():
     
     gameDisplay.fill(BACKGROUND_COLOR)
