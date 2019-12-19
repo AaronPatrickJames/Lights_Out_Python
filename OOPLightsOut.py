@@ -8,7 +8,7 @@ BACKGROUND_COLOR = (255,255,255)
 BUTTON_OFF = (51,39,0)
 BUTTON_ON = (255,204,0)
 
-WINDOW_SPAWN_LOCATION = [-110, 10]
+WINDOW_SPAWN_LOCATION = [-110, 10]#I made it incriment weird. so start back further
 WINDOW_SPAWN_SIZE = [100,100]
 
 
@@ -22,9 +22,10 @@ class window:
         self.size = size
         self.pos = pos
         self.light = light
-
+        
         draw_windows(self.pos, self.size, self.light)
 
+        
 #SPAWNS WINDOWS
 def window_pos():
     if WINDOW_SPAWN_LOCATION[0] <= DISPLAY_WIDTH - 120:#last spawn in row
@@ -32,7 +33,6 @@ def window_pos():
     else:
         WINDOW_SPAWN_LOCATION[0] = 10
         WINDOW_SPAWN_LOCATION[1] = WINDOW_SPAWN_LOCATION[1] + 120
-    print(WINDOW_SPAWN_LOCATION)
     return WINDOW_SPAWN_LOCATION
     
 #draw boxes on screen
@@ -48,6 +48,7 @@ def draw_windows(pos, size, on_off):
         
     pygame.draw.rect(gameDisplay, on_off,(top, left, x, y))
     
+#I just flip a switch
 def toggle_light(this_light):
     if this_light == True:
         this_light = False
@@ -55,29 +56,34 @@ def toggle_light(this_light):
         this_light = True
     return this_light
 
-def click_checker(pos_size_on):
+#really its an onclick listener for these home made buttons
+def click_checker(key, value):
     mouse_pos = pygame.mouse.get_pos()
-    pos = pos_size_on[0]
-    size = pos_size_on[1]
-    on_off = pos_size_on[2]
+    pos = value.pos
+    size = value.size
+    on_off = value.light
+    print(key, pos)
     #if mouse is in bounds of self.button/self.window
-    if int(pos[0] + size[0]) > mouse_pos[0] > int(pos[0]) and int(pos[1] + size[1]) > mouse_pos[1] > int(pos[1]):
-        on_off = toggle_light(on_off)
-        
-    return on_off
-    #CHECK IF CLICK IS INSIDE BUTTON, Then run button state changer(Toggle_light) return light -> make state change to object
+    #if int(pos[0] + size[0]) > mouse_pos[0] > int(pos[0]) and int(pos[1] + size[1]) > mouse_pos[1] > int(pos[1]):
 
+
+
+        
 def main():
-    COUNTER = 0
-    XCOUNTER = 0
-    MYCOUNTER = 0
+    count = 0
+    board = {}
     starting_x_windows = 5
     starting_y_windows = 5
-    window_position = [10,10]
     gameDisplay.fill(BACKGROUND_COLOR)
     draw_windows([0,600],[DISPLAY_WIDTH,10], False)#Square box (600X600)
-    building = dict(enumerate([window((window_pos()), WINDOW_SPAWN_SIZE) for i in range(starting_x_windows) for c in range(starting_y_windows)]))
-
+    for j in range(starting_x_windows):
+        for i in range(starting_y_windows):
+            count = count + 1
+            building = window(window_pos(), WINDOW_SPAWN_SIZE)
+            board.update({count : [building.pos, building.size, building.light]})
+    for key, value in board.items():
+        print(key, value)
+            
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -85,9 +91,10 @@ def main():
                 quit()
         #mouse clicked(click_checker)
         am_i_pressed = pygame.mouse.get_pressed()
-        if am_i_pressed[1] == 1:
-            for key,value in building.items():#note building need to be defined
-                light = click_checker(value)
+        if am_i_pressed[0] == 1:
+            for key, value in building.items():#note building need to be defined
+                click_checker(key, value)
+                
         #for key in dict (pass in values, pos, size)
             #run click_checker(dict key:(pos,size,on_off)) 
         pygame.display.update()
